@@ -1,0 +1,56 @@
+#!/bin/sh
+# pre-push 门禁
+#
+# 设计原则（对应"约束按强弱沉淀"）：
+#   能用确定性检查的，就不要靠 agent 自觉。
+#   这里每一条失败都会让 git push 真正被拒绝。
+#
+# 用法：
+#   自动 —— 安装后每次 push 触发
+#   手动 —— `sh .githooks/pre-push` 或 `npm run gate`
+
+set -e
+
+echo "=========================================="
+echo "  pre-push 门禁开始"
+echo "=========================================="
+
+echo ""
+echo "[1/5] TypeScript 类型检查"
+npx tsc --noEmit || {
+  echo "❌ 类型检查失败：修好类型错误再推"
+  exit 1
+}
+
+echo ""
+echo "[2/5] 代码规范 (eslint)"
+npx eslint src tests || {
+  echo "❌ 规范检查失败"
+  exit 1
+}
+
+echo ""
+echo "[3/5] 单元测试"
+npm test || {
+  echo "❌ 测试失败：这是最硬的一道闸"
+  exit 1
+}
+
+echo ""
+echo "[4/5] 改动范围检查"
+node scripts/check-diff-scope.js || {
+  echo "❌ 改动越界"
+  exit 1
+}
+
+echo ""
+echo "[5/5] 提交信息格式"
+node scripts/check-commit-msg.js || {
+  echo "❌ 提交信息不合规"
+  exit 1
+}
+
+echo ""
+echo "=========================================="
+echo "  ✅ 门禁全绿，允许推送"
+echo "=========================================="

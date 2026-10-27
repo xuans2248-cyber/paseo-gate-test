@@ -1,0 +1,12 @@
+# 强制 LF：shell 脚本被转成 CRLF 后 git 无法执行
+* text=auto eol=lf
+
+# 明确声明各类文件的行尾
+*.sh    text eol=lf
+*.ts    text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+
+# git 内部文件不做转换
+.githooks/* text eol=lf

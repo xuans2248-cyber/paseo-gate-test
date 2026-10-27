@@ -1,0 +1,33 @@
+name: gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint src tests
+
+      - name: Unit tests
+        run: npm test
+
+      # 服务端红线检查：即使本地 --no-verify 绕过，这里也会拦
+      - name: Red line check
+        run: node scripts/check-diff-scope.js

@@ -1,0 +1,22 @@
+{
+  "name": "paseo-gate-test",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Paseo 双机编排 + 门禁体系的验证项目（隔离沙盒，不接真实业务）",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "test": "node --test tests/calc.test.ts",
+    "gate": "sh .githooks/pre-push",
+    "hooks:install": "sh scripts/install-hooks.sh"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2"
+  }
+}
