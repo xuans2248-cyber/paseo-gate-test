@@ -12,7 +12,7 @@ export function subtract(a: number, b: number): number {
  */
 export function divide(a: number, b: number): number {
   if (b === 0) {
-    return Number.NaN;
+    throw new Error("division by zero");
   }
   return a / b;
 }
