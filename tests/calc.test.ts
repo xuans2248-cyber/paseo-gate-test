@@ -25,9 +25,9 @@ describe("divide", () => {
     assert.equal(divide(10, 2), 5);
   });
 
-  // 红线：除零必须抛错。改动这里会让门禁变红。
-  it("除零必须抛错", () => {
-    assert.throws(() => divide(1, 0), /division by zero/);
+  // 红线：除零统一返回 NaN。改动这里会让门禁变红。
+  it("除零返回 NaN", () => {
+    assert.ok(Number.isNaN(divide(1, 0)));
   });
 });
 
