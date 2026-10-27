@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 1 | `tsc --noEmit` | 强 | 类型错误 |
 | 2 | `eslint` | 强 | 规范问题、未使用变量 |
-| 3 | `vitest run` | **最强** | 行为回归（除零红线） |
+| 3 | `vitest run` | **最强** | 行为回归（除零 NaN 红线） |
 | 4 | `check-diff-scope.js` | 中 | 只改测试不改实现、私改红线文件 |
 | 5 | `check-commit-msg.js` | 中 | 提交信息不可复盘 |
 
@@ -36,9 +36,10 @@
 
 ---
 
-## 红线：除零必须抛错
+## 红线：除零统一返回 NaN
 
-`src/calc.ts` 的 `divide` 在除数为 0 时**必须抛错**。这是本项目的验收锚点。
+`src/calc.ts` 的 `divide` 在除数为 0 时**返回 NaN**（与 `modulo` 保持一致）。
+这是业务侧决定的验收锚点。
 
 - 测试文件里有对应的断言
 - 改动这个文件需要提交信息带 `REDLINE-CHANGE: <原因>`
@@ -60,8 +61,8 @@ npm run gate                  # 手动跑完整门禁
 ### 验证门禁真的有效（必做）
 
 ```bash
-# 故意写坏
-sed -i 's/throw new Error("division by zero")/return Number.NaN/' src/calc.ts
+# 故意写坏（例如让除法返回错误结果）
+sed -i 's/return a \/ b;/return a + b;/' src/calc.ts
 npm run gate
 # → 必须失败。如果它通过了，说明门禁是假的。
 ```

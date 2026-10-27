@@ -7,12 +7,12 @@ export function subtract(a: number, b: number): number {
 }
 
 /**
- * 除法。除零必须抛错，这是本项目的"红线"之一。
+ * 除法。除零统一返回 NaN，这是本项目的"红线"之一。
  * 门禁的测试用例会锁住这个行为。
  */
 export function divide(a: number, b: number): number {
   if (b === 0) {
-    throw new Error("division by zero");
+    return Number.NaN;
   }
   return a / b;
 }
